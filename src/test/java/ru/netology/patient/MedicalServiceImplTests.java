@@ -33,12 +33,20 @@ public class MedicalServiceImplTests {
 
         BloodPressure currentPressure = new BloodPressure(50, 300);
 
+        //Непонятные исправления
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
         // act:
         MedicalServiceImpl medicalService = new MedicalServiceImpl(patientInfoRepository,alertService);
         medicalService.checkBloodPressure("1", currentPressure);
 
         // assert:
-        Mockito.verify(alertService, Mockito.times(1)).send(Mockito.any());
+        Mockito.verify(alertService).send(argumentCaptor.capture());
+        Assertions.assertEquals("Warning, patient with id: 1, need help", argumentCaptor.getValue());
+
+        //Оставлю на всякий
+        //Mockito.verify(alertService, Mockito.times(1)).send("Warning, patient with id: 1, need help");
+
     }
 
     // 2
